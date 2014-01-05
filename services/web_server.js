@@ -11,6 +11,9 @@ web_server.configManager = null;
 web_server.port = 80;
 web_server.settings = null;
 
+web_server.activeGames = [];
+web_server.pendingGames = [];
+
 /** Initialization functions **/
 web_server.init = function(port){
 	if (port) {
@@ -34,25 +37,37 @@ web_server.start = function(){
 
 /** Begin Socket Hooks **/
 web_server.createSocketServer = function(){
+	var that = this;
 	this.socketServer = _io.listen(this.http, { log: false });
-	this.socketServer.on("connection", this.socket_onConnection);
+	this.socketServer.on("connection", function(s){
+		that.socket_onConnection(s);
+	});
 }
 
-web_server.socket_onConnection = function(socket, afterAuth) {
-	web_server.log("Socket connection established.");		
-	socket.on("start", web_server.socket_onStartEvent);
-	socket.on("disconnect", function(s){ 
-		web_server.socket_onDisconnect(socket);
+web_server.socket_onConnection = function(socket) {
+	var that = this;
+	this.log("Socket connection established.");		
+	this.socketServer = socket;
+	this.socketServer.on("disconnect", function(s){ 
+		that.socket_onDisconnect(s);
+	});
+	this.socketServer.on("new-game", function(data){ 
+		that.socket_onNewGame(data);
 	});
 }
 
 web_server.socket_onDisconnect = function(socket) {
-	web_server.log("Client Disconnected");
+	this.log("Client Disconnected");
 }
 
-web_server.socket_onStartEvent = function(data)
+web_server.socket_onNewGame = function(data)
 {
-	web_server.log("Received start event.");
+	//Create player object
+	//Create Game instance
+	//Add player as p1 in game
+	//Add Game to pending games
+	this.log("Received new game event.");
+	this.socketServer.emit("join-game", {id: 1, state: { turn : 0 }});
 }
 
 /** End socket hooks **/
