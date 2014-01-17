@@ -1,6 +1,5 @@
 function Player(opts) {
-	this.id = opts.id;
-	this.name = opts.name;
+	
 }
 
 Player.prototype = {
@@ -8,3 +7,5 @@ Player.prototype = {
 	name: "Unnamed Player",
 	socket: null
 };
+
+return new Player();

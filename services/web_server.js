@@ -62,7 +62,20 @@ web_server.socket_onDisconnect = function(socket) {
 
 web_server.socket_onNewGame = function(data)
 {
-	//Create player object
+	var game = null;
+	if(this.pendingGames.length > 0) {
+		game = this.pendingGames[0];
+	} else {
+		game = require("../entity/game");
+		this.pendingGames.push(game);
+	}
+
+	var player = require("../entity/player");
+	player.name = data.player.name;
+	game.addPlayer(player);
+	
+	console.log(game);
+	//Create player object}
 	//Create Game instance
 	//Add player as p1 in game
 	//Add Game to pending games

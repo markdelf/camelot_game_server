@@ -8,7 +8,7 @@ Game.prototype = {
 	},
 	turn: {
 		counter: 0,
-		label: "Waiting for an opponent"
+		label: "Waiting for an opponent",
 		player: null
 	},
 	open: function(rules) {
@@ -44,3 +44,5 @@ Game.prototype = {
 		return this.turn;
 	}
 };
+
+return new Game();
